@@ -16,6 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "@types/node-schedule": "^1.3.2",
+    "@types/uuid": "^8.3.4",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -26,9 +28,11 @@
     "jsonwebtoken": "^8.5.1",
     "lightship": "^6.7.2",
     "mysql2": "^2.3.3-rc.0",
+    "node-schedule": "^2.1.0",
     "nodemon": "^2.0.14",
     "sequelize": "^6.9.0",
     "typescript": "^4.4.4",
+    "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
   "devDependencies": {

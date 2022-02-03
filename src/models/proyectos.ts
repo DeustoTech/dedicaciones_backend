@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import { database } from '../lib/database';
+import { database } from '../api/lib/database';
 export interface projectProps {
     id: number;
     nombre: string;
@@ -28,7 +28,6 @@ Proyecto.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-
     },
     {
         sequelize: database,

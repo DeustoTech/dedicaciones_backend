@@ -1,13 +1,11 @@
 import { Sequelize } from 'sequelize';
-import { Usuario } from '../models/usuarios';
-import { GoogleUserJwt } from '../api/controllers/google.openid.controller';
+import { Usuario } from '../../models/usuarios';
+import { GoogleUserJwt } from '../controllers/google.openid.controller';
 
-import Logger from '../lib/logger';
-import { createMySQLConnection } from '../lib/mysql';
+import Logger from './logger';
+import { createMySQLConnection } from './mysql';
 
 const logger = Logger(__filename);
-
-// (message: string) => logger.debug(message) instead of logger.debug beacause logger gets all the args, and we only want the first one
 
 const dbConfig = {
     host: process.env.MYSQL_HOST,
@@ -41,17 +39,4 @@ export async function initialize(): Promise<void> {
         `CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`
     );
     await mysqlConnection.end();
-}
-
-export function logUserInDB(
-    googleUserInfo: Partial <GoogleUserJwt>
-): void {
-    Usuario.findOrCreate({
-        where: { nombre: googleUserInfo.name, email: googleUserInfo.email },
-        defaults: {
-            nombre: googleUserInfo.name,
-            email: googleUserInfo.email,
-            isAdministrador: false,
-        },
-    });
 }

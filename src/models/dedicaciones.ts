@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import { database } from '../lib/database';
+import { database } from '../api/lib/database';
 export interface DedicsProps {
     id_usuario: number;
     id_proyecto: number;
