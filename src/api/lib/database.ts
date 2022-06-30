@@ -1,7 +1,4 @@
-import { Sequelize } from 'sequelize';
-import { Usuario } from '../../models/usuarios';
-import { GoogleUserJwt } from '../controllers/google.openid.controller';
-
+import { Sequelize } from 'sequelize-typescript';
 import Logger from './logger';
 import { createMySQLConnection } from './mysql';
 
@@ -25,6 +22,7 @@ export const database = new Sequelize(
             process.env.MYSQL_LOGGING === 'true'
                 ? (message: string) => logger.debug(message)
                 : false,
+        models: ['/src/models'],
     }
 );
 

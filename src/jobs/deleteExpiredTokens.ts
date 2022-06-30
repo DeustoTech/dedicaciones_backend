@@ -18,7 +18,7 @@ const job = schedule.scheduleJob('*/1 * * * *', async function () {
 
         try {
             const revoked = await token.revokeToken();
-            logger.verbose('Revoked token', revoked);
+            logger.verbose('Revoked token', revoked); //FIXME does not appear
         } catch (error) {
             logger.error(error);
         } finally {

@@ -1,21 +1,54 @@
-import { Model, DataTypes } from 'sequelize';
 import { database } from '../api/lib/database';
-export interface UserProps {
-    id?: number;
-    email?: string;
-    nombre?: string;
-    isAdministrador?: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
+import {
+    BelongsToMany,
+    Column,
+    CreatedAt,
+    Default,
+    Model,
+    Table,
+    Unique,
+    UpdatedAt,
+} from 'sequelize-typescript';
+import { CreationOptional, Optional } from 'sequelize/types';
+import { Colaboracion } from './colaboraciones';
+import { Proyecto } from './proyectos';
+
+interface UsuarioAttributes {
+    id: number;
+    nombre: string;
+    email: string;
+    isHabilitado: boolean;
+    isAdministrador: boolean;
+    proyectos: Proyecto[];
 }
-export class Usuario extends Model<UserProps> implements UserProps {
-    id?: number;
-    email!: string;
+
+interface UsuarioCreationAttributes
+    extends Optional<
+        UsuarioAttributes,
+        'id' | 'isHabilitado' | 'isAdministrador' | 'proyectos'
+    > {}
+@Table({ timestamps: true, tableName: 'usuarios' })
+export class Usuario extends Model<
+    UsuarioAttributes,
+    UsuarioCreationAttributes
+> {
+    @Column
     nombre!: string;
+
+    @Unique
+    @Column
+    email!: string;
+
+    @Default(true)
+    @Column
+    isHabilitado!: boolean;
+
+    @Default(false)
+    @Column
     isAdministrador!: boolean;
 
-    createdAt?: Date;
-    updatedAt?: Date;
+    @BelongsToMany(() => Proyecto, () => Colaboracion)
+    proyectos?: Proyecto[];
 
     static async encontrarUsuarioPorId(id: number): Promise<Usuario | null> {
         const response = await Usuario.findOne({ where: { id } });
@@ -29,42 +62,3 @@ export class Usuario extends Model<UserProps> implements UserProps {
         return response;
     }
 }
-
-Usuario.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true,
-        },
-
-        email: {
-            type: DataTypes.STRING,
-            validate: {
-                isEmail: { msg: 'Not an email' },
-            },
-            allowNull: false,
-        },
-
-        nombre: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        isAdministrador: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-    },
-    {
-        sequelize: database,
-        timestamps: true,
-        tableName: 'usuarios',
-        indexes: [
-            {
-                fields: ['email'],
-                unique: true,
-            },
-        ],
-    }
-);

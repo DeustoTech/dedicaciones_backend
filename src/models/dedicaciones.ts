@@ -1,51 +1,38 @@
-import { Sequelize, Model, DataTypes } from 'sequelize';
-import { database } from '../api/lib/database';
-export interface DedicsProps {
-    id_usuario: number;
-    id_proyecto: number;
-    id: number;
-    fecha: Date;
-    duracion: number;
-    descripcion?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
+import {
+    Column,
+    CreatedAt,
+    ForeignKey,
+    Model,
+    Table,
+    UpdatedAt,
+} from 'sequelize-typescript';
+import { Tarea } from './tareas';
+import { Usuario } from './usuarios';
 
-export class Dedicacion extends Model<DedicsProps> implements DedicsProps {
+@Table
+export class Dedicacion extends Model {
+    @Column
     fecha!: Date;
-    duracion!: number;
-    id_usuario!: number;
-    id_proyecto!: number;
-    id!: number;
-}
 
-Dedicacion.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-        },
-        id_usuario: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        id_proyecto: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        fecha: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        duracion: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-    },
-    {
-        sequelize: database,
-        timestamps: true,
-        tableName: 'dedicaciones',
-    }
-);
+    @Column
+    duracion!: number;
+
+    @Column
+    descripcion?: string;
+
+    @CreatedAt
+    @Column
+    createdAt!: Date;
+
+    @UpdatedAt
+    @Column
+    updatedAt!: Date;
+
+    @ForeignKey(() => Usuario)
+    @Column
+    id_usuario!: number;
+
+    @ForeignKey(() => Tarea)
+    @Column
+    id_tarea!: number;
+}

@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { google } from 'googleapis';
 import jwt, { verify } from 'jsonwebtoken';
-import { UniqueConstraintError } from 'sequelize';
+
 import Logger from '../lib/logger';
+import { UniqueConstraintError } from 'sequelize';
 import { Usuario } from '../../models/usuarios';
 import { createToken } from '../lib/security';
 import { sendError, sendResponse } from '../lib/statusMessage';

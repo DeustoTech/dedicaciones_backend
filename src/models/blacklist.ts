@@ -1,21 +1,25 @@
-import { Sequelize, Model, DataTypes } from 'sequelize';
-import { database } from '../api/lib/database';
+import {
+    Column,
+    CreatedAt,
+    Model,
+    Table,
+    UpdatedAt,
+} from 'sequelize-typescript';
 import { checkToken } from '../api/lib/security';
 import { TokenExpiredError } from 'jsonwebtoken';
 
-export interface BlackTokenProps {
-    id?: number;
-    token: string;
-}
-
-export class BlackToken
-    extends Model<BlackTokenProps>
-    implements BlackTokenProps
-{
-    id?: number;
+@Table({ timestamps: true })
+export class BlackToken extends Model {
+    @Column
     token!: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+
+    @CreatedAt
+    @Column
+    createdAt!: Date;
+
+    @UpdatedAt
+    @Column
+    updatedAt!: Date;
 
     static async getTokenByToken(token: string): Promise<BlackToken | null> {
         const response = await BlackToken.findOne({ where: { token } });
@@ -34,22 +38,3 @@ export class BlackToken
         return false;
     }
 }
-BlackToken.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true,
-        },
-        token: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    },
-    {
-        sequelize: database,
-        timestamps: true,
-        tableName: 'blacklist',
-    }
-);
